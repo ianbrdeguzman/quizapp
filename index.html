@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Questionnaire</title>
+    <link rel="stylesheet" href="./style.css">
+    <script src="./app.js" defer></script>
+</head>
+<body>
+    <header class="header">
+        <div class="modal-container">
+            <div class="modal-content">
+                <p id="close">X</p>
+                <p>A quiz app made from HTML5, CSS3 and JavaScript. Outputs the result after completion.</p>
+            </div>
+        </div>
+        <p id="about" tabindex=0>about</p>
+        <p><a id="code" href="#" target="_blank">code</a></p>
+    </header>
+    <!-- start of quiz container -->
+    <div class="container">
+        <div class="questions">
+            <div class="question-header">
+                <h2 id="question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quidem, ipsam.</h2>
+            </div>
+            <div class="question-options start">
+                <ul>
+                    <li>
+                        <input type="radio" name="radio" id="a" class="answers">
+                        <label id="a-text" for="a">Lorem, ipsum.</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="radio" id="b" class="answers">
+                        <label id="b-text" for="b">Lorem, ipsum.</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="radio" id="c" class="answers">
+                        <label id="c-text" for="c">Lorem, ipsum.</label>
+                    </li>
+                    <li>
+                        <input type="radio" name="radio" id="d" class="answers">
+                        <label id="d-text" for="d">Lorem, ipsum.</label>
+                    </li> 
+                </ul>
+            </div>
+            <div id="submit">
+                <button>Submit</button>
+            </div>
+        </div>
+    </div>
+    <!-- end of quiz container -->
+</body>
+</html>
