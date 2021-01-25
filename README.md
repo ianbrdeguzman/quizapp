@@ -4,3 +4,4 @@ Check it out <a href="https://ianbrdeguzman.github.io/quizapp/">here!</a>
 * HTML5
 * CSS3
 * JavaScript
+* Open Triva Database API

@@ -1,158 +1,174 @@
-// store questions and answer in an object array
-const quizData = [
-    {
-        q: 'How many soccer players should each team have on the field at the start of each match?',
-        a: '11',
-        b: '10',
-        c: '8',
-        d: '12',
-        answer: 'a',
-    },
-    {
-        q: 'When Michael Jordan played for the Chicago Bulls, how many NBA Championships did he win?',
-        a: 'Five',
-        b: 'Six',
-        c: 'Four',
-        d: 'Seven',
-        answer: 'b',
-    },
-    {
-        q: 'In what year was the first-ever Wimbledon Championship held?',
-        a: '1875',
-        b: '1876',
-        c: '1877',
-        d: '1878',
-        answer: 'c',
-    },
-    {
-        q: 'What country won the first FIFA World Cup in 1930?',
-        a: 'Brazil',
-        b: 'France',
-        c: 'Belguim',
-        d: 'Uruguay',
-        answer: 'd',
-    },
-]
+// Data taken from Open Triva Database API
+// https://opentdb.com/api_config.php
 
-// initialize index will be used in object array
+// initialize global variables
 let index = 0;
-
-// initialize user score
 let score = 0;
+const dataArray = [];
 
-// get answers element
-const answers = document.querySelectorAll('.answers');
+// fetch data from Open Triva Database API
+const getData = async () => {
+    const response = await fetch('https://opentdb.com/api.php?amount=10&type=multiple');
+    const data = await response.json();
 
-
-// start quiz function
-const startQuiz = () => {
-
-    // get question and option elements
-    const q = document.getElementById('question');
-    const aText = document.getElementById('a-text');
-    const bText = document.getElementById('b-text');
-    const cText = document.getElementById('c-text');
-    const dText = document.getElementById('d-text');
-    
-    // change text content based on first object in array
-    q.textContent = quizData[index].q;
-    aText.textContent = quizData[index].a;
-    bText.textContent = quizData[index].b;
-    cText.textContent = quizData[index].c;
-    dText.textContent = quizData[index].d;
-
+    createDataArray(data.results);
 }
 
-// store answer function
-const storeAnswer = (answer) => {
+// call getData
+getData();
 
-    // check if answer is the same as quizData answer
-    if (answer === quizData[index].answer) {
+// create array from fetched Data
+const createDataArray= (data) => {
 
-        // increase score
-        score++;
+    // loop every key in data
+	for (let key in data) {
+	    const q = data[key].question;
+	    const ca = data[key].correct_answer;
+	    const ia = data[key].incorrect_answers;
+
+        // push object with question and correct answer to dataArray
+	    dataArray.push( {q: q, o: [ca], a: ca} );
+
+        // push incorrect answers to dataArray
+	    ia.forEach( (item) => {
+            dataArray[key].o.push(item);
+        });
+
+        // shuffle answers in dataArray
+        shuffleArray(dataArray[key].o);
     }
 };
 
-
-// clear radio button selection function
-const clearRadio = () => {
-    answers.forEach ( (answer) => {
-        answer.checked = false;
-    })
+// Fisher-Yates (aka Knuth) Shuffle Algorithm
+const shuffleArray = (array) => {
+    
+    for (let i = array.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
 };
 
-// end quiz function
+// startQuiz function
+const startQuiz = () => {
+
+    // assign html dom elements
+    const q = document.getElementById('question');
+    const a = document.getElementById('a-text');
+    const b = document.getElementById('b-text');
+    const c = document.getElementById('c-text');
+    const d = document.getElementById('d-text');
+
+    // new question
+	const item = `
+    			<div>
+        		    <h2 id="question">${dataArray[index].q}</h2>
+    			</div>
+        		<ul>
+            		<li>
+                		<input type="radio" name="radio" id="a" class="answers">
+                		<label for="a" id="a-text">${dataArray[index].o[0]}</label>
+            		</li>
+            		<li>
+                		<input type="radio" name="radio" id="b" class="answers">
+                		<label for="b" id="b-text">${dataArray[index].o[1]}</label>
+            		</li>
+            		<li>
+                		<input type="radio" name="radio" id="c" class="answers">
+                		<label for="c" id="c-text">${dataArray[index].o[2]}</label>
+            		</li>
+            		<li>
+                		<input type="radio" name="radio" id="d" class="answers">
+                		<label for="d" id="d-text">${dataArray[index].o[3]}</label>
+            		</li>
+        		</ul>
+    			<div>
+        		    <button id="submit">Submit</button>
+                </div>
+                `
+    // insert item to question container
+    document.querySelector('.question-container')
+        .innerHTML = item;
+};
+
+// checkAnswer function
+const checkAnswer = (answer) => {
+
+	const ans = answer.nextElementSibling.textContent;
+
+    // check if answer is same as dataArray answer
+	if (ans === dataArray[index].a) {
+        
+        // increase score
+		score++;
+    };
+    
+    // increase index for next dataArray question
+	index++;
+};
+
+// endQuiz function
 const endQuiz = () => {
 
-    // get questions element
-    const questions = document.querySelector('.questions');
-
-
-    // change content and style of questions element
-    questions.innerHTML = `
-                            <div class="questions">
-                                <div class="question-header">
-                                    <h2 id="question">You score ${score} out of ${quizData.length}</h2>
-                                </div>
-                                <div id="submit">
-                                    <button id="retry">Retry</button>
-                                </div>
-                            </div>`
-    questions.style.textAlign = 'center';
-
+    // clear question container
+    const container = document.querySelector('.question-container');
+    container.innerHTML = '';
+    
+    // insert new html div
+    container.innerHTML = `
+        			<div id="result">
+            			<h2>You score <span>${score}</span> out of ${dataArray.length}</h2>
+        			</div>
+        			<div>
+            			<button id="retry">Retry</button>
+                    </div>
+                    `
+    
     // add click event to retry button to reload page
     document.getElementById('retry')
         .addEventListener('click', () => {
             location.reload();
-        })
+        });
 };
 
-// add click event on submit button
-document.querySelector('button')
-    .addEventListener('click', () => {
+// add event linstener to submit button
+document.addEventListener('click', (e) => {
 
-        // for each answer 
+    const answers = document.querySelectorAll('.answers');
+
+    // check if button id is submit
+    if (e.target.id === 'submit') {
+
+        // loop each answer 
         answers.forEach( (answer) => {
 
-            // check if one of the answer is checked
+            // check if answer is not empty
             if(answer.checked) {
 
-                // store the answer
-                storeAnswer(answer.id);
+                // check if index is less than dataArray
+                if (index < dataArray.length - 1) {
 
-                // if index is less than quizData length
-                if (index < quizData.length - 1) {
+                    // call checkAnswer function
+                    checkAnswer(answer);
                     
-                    // increase index
-                    index++;
-
-                    // call startQuiz function
+                    // call startQuiz for next question
                     startQuiz();
-
-                    // call clearRadio function
-                    clearRadio();
                 } else {
-                    // call endQuiz function
-                    endQuiz();
+
+                    // end quiz if index is greater than dataArray
+			        endQuiz();
                 }
             }
         })
-    })
+    }
+})
 
-// call startQuiz function
-startQuiz();
-
-// toggle about modal function
-const toggleAbout = () => {
-    document.querySelector('.modal-container')
-            .classList.toggle('active');
-}
-
-// add click event to about
-document.getElementById('about')
-    .addEventListener('click', toggleAbout);
-
-// add click event to X
-document.getElementById('close')
-    .addEventListener('click', toggleAbout);
+// add event listener to start button to start quiz
+document.getElementById('start')
+    .addEventListener('click', () => {
+        document.querySelector('.about')
+            .classList.toggle('start');
+        	startQuiz();
+    });

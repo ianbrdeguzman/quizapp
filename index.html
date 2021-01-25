@@ -2,53 +2,22 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Questionnaire</title>
+    <meta name="viewport" content="height=device-height width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Quiz App</title>
     <link rel="stylesheet" href="./style.css">
     <script src="./app.js" defer></script>
+    <!-- Font Awesome Icons -->
+    <script src="https://kit.fontawesome.com/1a8bb7941b.js" crossorigin="anonymous"></script>
 </head>
 <body>
-    <header class="header">
-        <div class="modal-container">
-            <div class="modal-content">
-                <p id="close">X</p>
-                <p>A quiz app made from HTML5, CSS3 and JavaScript. Outputs the result after completion.</p>
-            </div>
-        </div>
-        <p id="about" tabindex=0>about</p>
-        <p><a id="code" href="https://github.com/ianbrdeguzman/quizapp" target="_blank">code</a></p>
-    </header>
-    <!-- start of quiz container -->
-    <div class="container">
-        <div class="questions">
-            <div class="question-header">
-                <h2 id="question">Lorem ipsum dolor, sit amet consectetur adipisicing elit. Quidem, ipsam.</h2>
-            </div>
-            <div class="question-options start">
-                <ul>
-                    <li>
-                        <input type="radio" name="radio" id="a" class="answers">
-                        <label id="a-text" for="a">Lorem, ipsum.</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="radio" id="b" class="answers">
-                        <label id="b-text" for="b">Lorem, ipsum.</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="radio" id="c" class="answers">
-                        <label id="c-text" for="c">Lorem, ipsum.</label>
-                    </li>
-                    <li>
-                        <input type="radio" name="radio" id="d" class="answers">
-                        <label id="d-text" for="d">Lorem, ipsum.</label>
-                    </li> 
-                </ul>
-            </div>
-            <div id="submit">
-                <button>Submit</button>
-            </div>
+    <div class="question-container">
+        <div class="about">
+            <h1>Quiz App</br>using</br><span>Open</br>Trivia</br>Database</br>API</span></h1>
+            <button id="start">Start</button>
         </div>
     </div>
-    <!-- end of quiz container -->
+    <footer>
+        <p><a href="https://github.com/ianbrdeguzman/quizapp">View my code <i class="fab fa-github"></i></a></p>
+    </footer>
 </body>
 </html>
